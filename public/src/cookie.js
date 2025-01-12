@@ -1,4 +1,5 @@
-console.log('loaded');
+console.log('loaded cookie.js');
+
 const cookie = {
   defaultExpires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7), //1週間
   obj: {},

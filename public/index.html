@@ -3,17 +3,42 @@
   <head>
     <title>ProChat</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="style/style.css" />
+    <link rel="stylesheet" href="assets/style.css" />
+    <script
+    src="https://cdn.socket.io/4.8.1/socket.io.min.js"
+    integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+"
+    crossorigin="anonymous"
+  ></script>
   </head>
   <body>
-    <script
-      src="https://cdn.socket.io/4.8.1/socket.io.min.js"
-      integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+"
-      crossorigin="anonymous"
-    ></script>
-    <h1>Hello world!</h1>
+    <div class="login-page-screen">
+      <div class="login-page-container center">
+        <div>
+        <h1>ProChatにログイン</h1>
+        <p>ユーザー名</p>
+        <input type="text"><br>
+        <p>パスワード</p>
+        <input type="password"><br>
+        <p id="login-message"></p>
+        <div><span>ログイン</span></div>
+        <br>
+        <div><font size="1">初めての方</font><span>サインアップ</span></div>
+      </div>
+      </div>
+    </div>
 
+    <div class="loading-screen">
+    <div class="loading-container">
+      <div class="loading-child">
+        <center>
+          <h1>Loading...</h1>
+          <span id="loading-process"></span>
+        </center>
+      </div>
+    </div>
+    </div>
     <script src="src/cookie.js"></script>
     <script src="src/main.js"></script>
+    <script src="src/front.js"></script>
   </body>
 </html>

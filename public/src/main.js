@@ -1,4 +1,10 @@
-console.log('loaded');
+console.log('loaded main.js');
+const flg = {
+  load:{
+    whole:false,
+  }
+}
+
 
 function checkLogined() {
   cookie.refreshCookie();
@@ -12,7 +18,8 @@ function checkLogined() {
     } else {
     }
   }
+  return cookie.obj.loggedIn
 }
 
 socket = io();
-checkLogined();
+const isLoggedIn = checkLogined();

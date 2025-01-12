@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 app.all('*', (req, res) => {
-  res.sendFile(__dirname + '/404.html');
+  res.sendFile(__dirname + '/public/404.html');
 });
 
 // 3000番ポートでHTTPサーバーを起動
