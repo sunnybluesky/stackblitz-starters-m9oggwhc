@@ -32,4 +32,5 @@ server.listen(PORT, () => {
 // クライアントとのコネクションが確立したら'connected'という表示させる
 io.on('connection', (socket) => {
   console.log(`connected id:${socket.id}`);
+  socket.to(socket.io).emit("confirm-connection",true)
 });

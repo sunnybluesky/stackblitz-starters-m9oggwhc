@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
   <head>
     <title>ProChat</title>
     <meta charset="utf-8" />
@@ -13,16 +13,17 @@
   <body>
     <div class="login-page-screen">
       <div class="login-page-container center">
-        <div>
-        <h1>ProChatにログイン</h1>
+        <div class="login-signup-form">
+        <h1 class="title">ProChatにログイン</h1>
         <p>ユーザー名</p>
-        <input type="text"><br>
+        <input type="text" id="login-user-name"><br>
         <p>パスワード</p>
-        <input type="password"><br>
+        <input type="password" id="login-password"><br>
         <p id="login-message"></p>
-        <div><span>ログイン</span></div>
+        <div class="button login-signup-button"><span>ログイン</span></div>
         <br>
-        <div><font size="1">初めての方</font><span>サインアップ</span></div>
+        <p class="change-type-label">アカウントをお持ちでない場合</p>
+        <div class="button" id="change-login-form-type"><span>サインアップ</span></div>
       </div>
       </div>
     </div>

@@ -23,3 +23,6 @@ function checkLogined() {
 
 socket = io();
 const isLoggedIn = checkLogined();
+socket.on('confirm-connection', (msg) => {
+  console.log('接続が確認されました', msg);
+});

@@ -5,7 +5,7 @@
 }
 @font-face {
   font-family:"keifont";
-  src:url("assets/keifont.woff") format("woff");
+  src:url("keifont.woff") format("woff");
 }
 @keyframes show-loading-message{
   0%{
@@ -26,6 +26,14 @@
   }
   to{
     opacity:0;
+  }
+}
+@keyframes fadein{
+  from {
+    opacity:0;
+  }
+  to{
+    opacity:1;
   }
 }
 html {
@@ -91,4 +99,17 @@ input{
   border:none;
   width:100%;
   height:30px;
+}
+.button{
+  border:1px solid var(--highlight-color);
+  text-align:center;
+  border-radius: 5px;
+  width:100px;
+  padding:5px;
+}
+.button :hover{
+  background: var(--highlight-color);
+}
+#login-message{
+  color:rgb(230, 125, 125);
 }
