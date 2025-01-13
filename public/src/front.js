@@ -51,7 +51,8 @@ const elements = {
         message:document.querySelector("#login-message"),
         userName:document.querySelector("#login-user-name"),
         password:document.querySelector("#login-password"),
-        loginSuccessMessage:document.querySelector(".success-login-message")
+        loginSuccessMessage:document.querySelector(".success-login-message"),
+        loginFailedMessage:document.querySelector(".failed-login-message")
     }
 }
 
@@ -89,12 +90,16 @@ elements.login.loginBtn.addEventListener("click",()=>{
         console.log("matched")
         requestSignUp(username,password)
         }else{
-            alert("パスワードが一致しませんでした。")
+        updateLoginFailedMessage("パスワードが一致しませんでした。")
         }
 }
 })
 
 var checkForm = setInterval(()=>{
+    if(eval(cookie.obj.loggedIn)){
+        clearInterval(checkForm)
+        return 0;
+    }
         isAbleLogin = true
         var v = elements.login.userName.value
     elements.login.message.textContent = ""
@@ -117,9 +122,13 @@ var checkForm = setInterval(()=>{
         isAbleLogin = false
         document.querySelector(".login-signup-button").style.opacity = 0.5
     }
+
 },1000/fps)
 
 waitLoading()
 setTimeout(()=>{
     flg.load.whole = true
 },500)
+function updateLoginFailedMessage(str){
+    elements.login.loginFailedMessage.innerHTML = str
+}

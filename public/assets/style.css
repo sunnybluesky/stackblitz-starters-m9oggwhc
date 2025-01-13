@@ -109,7 +109,7 @@ input{
 .button :hover{
   background: var(--highlight-color);
 }
-#login-message{
+.warning{
   color:rgb(230, 125, 125);
 }
 .success-login-message{

@@ -56,9 +56,22 @@ socket.on("res-login", function (data) {
     cookie.setCookie("password",user.password)
     cookie.refreshCookie()
     elements.login.loginSuccessMessage.textContent = "まもなくログインが完了します..."
+    updateLoginFailedMessage("")
     setTimeout(()=>{
       location.reload()
       },300)
+  }else{
+    switch(data[1]){
+      case "user-not-found":
+        updateLoginFailedMessage("ユーザーが見つかりませんでした。");
+      break;
+      case "password-invalid":
+        updateLoginFailedMessage("パスワードまたはユーザー名が一致しません。")
+      break;
+      default:
+        updateLoginFailedMessage("不明のエラーです。");
+      break;
+    }
   }
 })
 
