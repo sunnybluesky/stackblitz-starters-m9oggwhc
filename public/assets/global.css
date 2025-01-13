@@ -38,6 +38,8 @@ body {
     background:var(--menu-background-color);
     height:100%;
     width:220px;
+    padding-right: 10px;
+   padding-left: 10px;
 }
 .side-menu :hover{
     background: var(--background-color);
