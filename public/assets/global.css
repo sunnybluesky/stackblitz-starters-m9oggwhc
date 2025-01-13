@@ -1,0 +1,45 @@
+body {
+    overflow: hidden;
+  }
+:root{
+    --top-menu-item-height:40px;
+    --highlight-color:rgb(45, 45, 65);
+    --menu-background-color:linear-gradient(45deg, rgb(25, 25, 37) 0%, rgb(18, 18, 30) 100%);
+}
+.top-menu{
+    background:var(--menu-background-color);
+    height:var(--top-menu-item-height);
+    display:flex;
+}
+
+.top-menu > div > span{
+    font-size:15px;
+}
+.top-menu > h2{
+    line-height: calc(var(--top-menu-item-height) - 10px);
+    padding:5px;
+    margin:5px;
+}
+.main{
+    font-size:15px;
+}
+.side-menu > div{
+    width: 200px;
+    text-align: center;
+    height: calc( var(--top-menu-item-height) - 10px);
+    margin:5px;
+    padding:5px;
+    border:1px solid var(--highlight-color);
+    line-height: calc(var(--top-menu-item-height) - 10px);
+    border-radius: 10px;
+}
+.side-menu{
+    padding-top:5px;
+    background:var(--menu-background-color);
+    height:100%;
+    width:220px;
+}
+.side-menu :hover{
+    background: var(--background-color);
+    cursor: pointer;
+}

@@ -1,11 +1,23 @@
 console.log('loaded main.js');
 const flg = {
-  load:{
-    whole:false,
+  load: {
+    whole: false,
   }
 }
-
-
+const responseTime = {
+  s: 0,
+  e: 0,
+  elapsed: 0,
+  start: function () {
+    this.s = new Date()
+  },
+  stop: function () {
+    this.e = new Date()
+    this.elapsed = this.e.getTime() - this.s.getTime();
+    return this.elapsed
+  },
+}
+let user = null;
 function checkLogined() {
   cookie.refreshCookie();
   console.log(cookie.obj);
@@ -13,16 +25,46 @@ function checkLogined() {
     cookie.setCookie('loggedIn', false, cookie.defaultExpires);
   } else {
     var v = JSON.parse(cookie.obj.loggedIn);
-    if (v) {
-      cookie.setCookie('loggedIn', false, cookie.defaultExpires);
-    } else {
-    }
   }
   return cookie.obj.loggedIn
 }
 
 socket = io();
+responseTime.start()
+
 const isLoggedIn = checkLogined();
-socket.on('confirm-connection', (msg) => {
-  console.log('接続が確認されました', msg);
+
+socket.on('confirm-connection', function () {
+  var time = (responseTime.stop())
+  console.log('接続が確認されました');
+  console.log(`応答時間:${time}ms`)
 });
+socket.on("res-signup", function (data) {
+  console.log(data)
+  if (data[0]) {
+    //サインアップに成功
+    socket.emit("req-login", [data[2], data[3]])
+  }
+})
+socket.on("res-login", function (data) {
+  console.log(data)
+  if (data[0]) {
+    //ログインに成功
+    user = data[2]
+    cookie.setCookie("loggedIn","true")
+    cookie.setCookie("username",user.name)
+    cookie.setCookie("password",user.password)
+    cookie.refreshCookie()
+    elements.login.loginSuccessMessage.textContent = "まもなくログインが完了します..."
+    setTimeout(()=>{
+      location.reload()
+      },300)
+  }
+})
+
+function requestLogin(username, password) {
+  socket.emit("req-login", [username, password])
+}
+function requestSignUp(username, password) {
+  socket.emit("req-signup", [username, password])
+}

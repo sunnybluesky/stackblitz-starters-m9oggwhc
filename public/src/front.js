@@ -1,5 +1,5 @@
 console.log('loaded front.js');
-
+const fps = 24
 //ロード関連
 
 let loadMessage = "connecting to server"
@@ -18,8 +18,12 @@ const wait = setInterval(()=>{
     if(flg.load.whole){
         clearInterval(wait)
         updateMessage("complete!")
-        if(!isLoggedIn){
+            cookie.refreshCookie()
+        if(eval(cookie.obj.loggedIn)){
             document.querySelector(".login-page-screen").style.display = "none"//ログインフォームを非表示
+        }else{
+            console.log("login/signup")
+
         }
         screenElement.style.animation = `fadeout 0.3s ease 0s `
         setTimeout(()=>{
@@ -29,7 +33,7 @@ const wait = setInterval(()=>{
         },270)
 
     }
-},1000/30)
+},1000/fps)
 
 }
 
@@ -47,6 +51,7 @@ const elements = {
         message:document.querySelector("#login-message"),
         userName:document.querySelector("#login-user-name"),
         password:document.querySelector("#login-password"),
+        loginSuccessMessage:document.querySelector(".success-login-message")
     }
 }
 
@@ -71,13 +76,22 @@ elements.login.changeFormType.addEventListener("click",()=>{
 })
 elements.login.loginBtn.addEventListener("click",()=>{
     if(!isAbleLogin){return null;}
-    if(elements.login.password.value.length < 1){
+    const username = elements.login.userName.value
+    const password = elements.login.password.value
+    if(password.length < 1){
         alert("パスワードが入力されていません。")
     }
     if(loginFormMode == "login"){
+        requestLogin(username,password)
     }else{
-        alert("")
-    }
+        var v = prompt("パスワードを再度入力してください。")
+        if(v == password){
+        console.log("matched")
+        requestSignUp(username,password)
+        }else{
+            alert("パスワードが一致しませんでした。")
+        }
+}
 })
 
 var checkForm = setInterval(()=>{
@@ -103,7 +117,7 @@ var checkForm = setInterval(()=>{
         isAbleLogin = false
         document.querySelector(".login-signup-button").style.opacity = 0.5
     }
-},1000/24)
+},1000/fps)
 
 waitLoading()
 setTimeout(()=>{

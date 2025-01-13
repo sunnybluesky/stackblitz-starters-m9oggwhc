@@ -28,27 +28,28 @@ const cookie = {
   refreshCookie: function () {
     this.obj = this.getAllCookies();
   },
+    // Cookieの書き出し
+    setCookie: function(name, value, expires = this.defaultExpires, path, domain, secure){
+      let cookieString = `${name}=${value}`;
+      if (expires instanceof Date) {
+        cookieString += `; expires=${expires.toUTCString()}`;
+      }
+      if (path) {
+        cookieString += `; path=${path}`;
+      }
+      if (domain) {
+        cookieString += `; domain=${domain}`;
+      }
+      if (secure) {
+        cookieString += `; secure`;
+      }
+      document.cookie = cookieString;
+      cookie.refreshCookie();
+    },
   // Cookieの削除
-  deleteCookie: (name) => {
-    this.setCookie(name, '', new Date(0));
+  deleteCookie: function(name){
+    this.setCookie(name, "", new Date(0));
     this.refreshCookie();
   },
-  // Cookieの書き出し
-  setCookie: (name, value, expires, path, domain, secure) => {
-    let cookieString = `${name}=${value}`;
-    if (expires instanceof Date) {
-      cookieString += `; expires=${expires.toUTCString()}`;
-    }
-    if (path) {
-      cookieString += `; path=${path}`;
-    }
-    if (domain) {
-      cookieString += `; domain=${domain}`;
-    }
-    if (secure) {
-      cookieString += `; secure`;
-    }
-    document.cookie = cookieString;
-    cookie.refreshCookie();
-  },
+
 };

@@ -39,15 +39,14 @@
 html {
   width:100%;
   height:100%;
-  margin: 0px;
 }
 body {
+  margin: 0px;
   width:100%;
   height:100%;
   background: var(--background-color);
   color: var(--font-color);
   font-family: "keifont";
-  overflow: hidden;
 }
 .loading-screen{
   position: fixed;
@@ -112,4 +111,10 @@ input{
 }
 #login-message{
   color:rgb(230, 125, 125);
+}
+.success-login-message{
+  color:rgb(125, 230, 174);
+}
+.screen{
+  height:100%;
 }
