@@ -135,3 +135,79 @@ var wait = setInterval(() => {
 function updateLoginFailedMessage(str) {
     elements.login.loginFailedMessage.innerHTML = str
 }   
+
+
+//はれちゃっと広場関連
+
+class placeRoom {
+    name = "";
+    color = "#000"
+    objectData = []
+    type = "none"
+    position = [0,0]
+    constructor(name="",type="color",position=[0,0],objectData=[],attr={color:"#000"}){
+        this.name = name;
+        this.attr = attr
+        this.objectData = objectData;
+        this.type =type
+        this.position = position
+    }
+    drawBackGround(){
+        switch(this.type){
+            case "color":
+        const ctx = place.ctx
+        ctx.fillStyle = this.attr.color
+        ctx.fillRect(0,0,place.el.width,place.el.height)
+        break;
+        default:
+
+        break;
+        }
+    }
+}
+
+const place = {
+    el:document.querySelector("#canvas-place"),
+    ctx:null,
+    myCharacter:{
+        type:"Tofu",
+        position:[640,360],
+        //ここまで必須
+        attr:{},
+        color:"#fff",
+        size:30,
+    },
+    roomsList:[
+        new placeRoom("lobby","color",[640,360],[],{color:"#224"}),
+    ],
+    room:"",
+    init:function(){
+        this.ctx = this.el.getContext('2d')
+    },
+    update:function(){
+        const ctx = this.ctx
+        this.el.style.height = (innerHeight-40)+"px"
+        ctx.clearRect(0,0,this.el.innerWidth,this.el.innerHeight)
+        this.roomsList[0].drawBackGround()
+
+        this.drawCharacter(this.myCharacter)
+    },
+    drawCharacter:function(chara){
+        const ctx = this.ctx
+        switch(chara.type){
+            case "Tofu":
+                ctx.fillStyle = chara.color
+                ctx.fillRect(chara.position[0] - (chara.size/2),chara.position[1] - (chara.size/2),chara.size,chara.size)
+            break;
+            default:
+                console.error("意図しない型です。")
+            break;
+        }
+    },
+}
+
+place.init()
+setInterval(()=>{
+    place.update()
+    
+})
