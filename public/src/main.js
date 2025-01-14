@@ -1,4 +1,5 @@
 console.log('loaded main.js');
+let screenMode = "place"
 const flg = {
   load: {
     count: 0,

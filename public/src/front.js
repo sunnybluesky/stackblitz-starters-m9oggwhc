@@ -167,6 +167,12 @@ class placeRoom {
 }
 
 const place = {
+    key:{
+        w:false,
+        a:false,
+        s:false,
+        d:false
+    },
     el:document.querySelector("#canvas-place"),
     ctx:null,
     myCharacter:{
@@ -176,22 +182,52 @@ const place = {
         attr:{},
         color:"#fff",
         size:30,
+        speed:5,
     },
     roomsList:[
         new placeRoom("lobby","color",[640,360],[],{color:"#224"}),
     ],
-    room:"",
+    roomNumber:0,
     init:function(){
-        this.ctx = this.el.getContext('2d')
+        this.ctx = this.el.getContext('2d');
+        document.body.addEventListener("keydown",(e)=>{
+            if(e.key == "w"){this.key.w = true;}
+            if(e.key == "a"){this.key.a = true;}
+            if(e.key == "s"){this.key.s = true;}
+            if(e.key == "d"){this.key.d = true;}
+        })
+        document.body.addEventListener("keyup",(e)=>{
+            if(e.key == "w"){this.key.w = false;}
+            if(e.key == "a"){this.key.a = false;}
+            if(e.key == "s"){this.key.s = false;}
+            if(e.key == "d"){this.key.d = false;}
+        })
+    },
+    updatePosition:function(){
+        if(this.key.w){this.roomsList[this.roomNumber].position[1] -= this.myCharacter.speed}
+        if(this.key.s){this.roomsList[this.roomNumber].position[1] += this.myCharacter.speed}
+        if(this.key.d){this.roomsList[this.roomNumber].position[0] += this.myCharacter.speed}
+        if(this.key.a){this.roomsList[this.roomNumber].position[0] -= this.myCharacter.speed}
+
+        var x = this.roomsList[this.roomNumber].position[0] 
+        var y = this.roomsList[this.roomNumber].position[1]
+        if(x < 0){ this.roomsList[this.roomNumber].position[0] = 0;}
+        if(x > 1280){ this.roomsList[this.roomNumber].position[0] =1280;}
+        if(y < 0){ this.roomsList[this.roomNumber].position[1] = 0; }
+        if(y > 720){ this.roomsList[this.roomNumber].position[1] = 720;}
     },
     update:function(){
         const ctx = this.ctx
-        this.el.style.height = (innerHeight-40)+"px"
+        this.el.style.height = (innerHeight-40)+"px" //canvasのサイズを変更
         ctx.clearRect(0,0,this.el.innerWidth,this.el.innerHeight)
-        this.roomsList[0].drawBackGround()
+        this.roomsList[this.roomNumber].drawBackGround()//背景を描画
 
+        this.updatePosition()
+
+        this.myCharacter.position = this.roomsList[this.roomNumber].position
         this.drawCharacter(this.myCharacter)
     },
+
     drawCharacter:function(chara){
         const ctx = this.ctx
         switch(chara.type){
