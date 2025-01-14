@@ -45,3 +45,12 @@ body {
     background: var(--background-color);
     cursor: pointer;
 }
+.side-menu > .bottom{
+    display:inline-block;
+    position: absolute;
+    bottom: 0;
+}
+.middle-container{
+    display:flex;
+    height:100%;
+}

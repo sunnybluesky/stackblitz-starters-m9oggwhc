@@ -126,9 +126,12 @@ var checkForm = setInterval(()=>{
 },1000/fps)
 
 waitLoading()
-setTimeout(()=>{
+var wait = setInterval(()=>{
+    if(flg.load.count == flg.load.needed){
     flg.load.whole = true
-},500)
+    clearInterval(wait)
+}
+},1000/fps)
 function updateLoginFailedMessage(str){
     elements.login.loginFailedMessage.innerHTML = str
-}
+}   

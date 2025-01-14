@@ -1,7 +1,12 @@
 console.log('loaded main.js');
 const flg = {
   load: {
+    count:0,
+    needed:2,
     whole: false,
+    connection:false,
+    font:false,
+
   }
 }
 const responseTime = {
@@ -38,6 +43,8 @@ socket.on('confirm-connection', function () {
   var time = (responseTime.stop())
   console.log('接続が確認されました');
   console.log(`応答時間:${time}ms`)
+  flg.load.connection = true
+  flg.load.count++
 });
 socket.on("res-signup", function (data) {
   console.log(data)
@@ -81,3 +88,8 @@ function requestLogin(username, password) {
 function requestSignUp(username, password) {
   socket.emit("req-signup", [username, password])
 }
+
+document.fonts.ready.then(function() { 
+  flg.load.font = true
+  flg.load.count++
+});
