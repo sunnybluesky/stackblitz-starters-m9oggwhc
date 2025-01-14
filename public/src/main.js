@@ -1,11 +1,11 @@
 console.log('loaded main.js');
 const flg = {
   load: {
-    count:0,
-    needed:2,
+    count: 0,
+    needed: 2,
     whole: false,
-    connection:false,
-    font:false,
+    connection: false,
+    font: false,
 
   }
 }
@@ -58,26 +58,26 @@ socket.on("res-login", function (data) {
   if (data[0]) {
     //ログインに成功
     user = data[2]
-    cookie.setCookie("loggedIn","true")
-    cookie.setCookie("username",user.name)
-    cookie.setCookie("password",user.password)
+    cookie.setCookie("loggedIn", "true")
+    cookie.setCookie("username", user.name)
+    cookie.setCookie("password", user.password)
     cookie.refreshCookie()
     elements.login.loginSuccessMessage.textContent = "まもなくログインが完了します..."
     updateLoginFailedMessage("")
-    setTimeout(()=>{
+    setTimeout(() => {
       location.reload()
-      },300)
-  }else{
-    switch(data[1]){
+    }, 300)
+  } else {
+    switch (data[1]) {
       case "user-not-found":
         updateLoginFailedMessage("ユーザーが見つかりませんでした。");
-      break;
+        break;
       case "password-invalid":
         updateLoginFailedMessage("パスワードまたはユーザー名が一致しません。")
-      break;
+        break;
       default:
         updateLoginFailedMessage("不明のエラーです。");
-      break;
+        break;
     }
   }
 })
@@ -89,7 +89,7 @@ function requestSignUp(username, password) {
   socket.emit("req-signup", [username, password])
 }
 
-document.fonts.ready.then(function() { 
+document.fonts.ready.then(function () {
   flg.load.font = true
   flg.load.count++
 });
