@@ -238,6 +238,13 @@ const place = {
 
         this.myCharacter.position = this.roomsList[this.roomNumber].position
         this.drawCharacter(this.myCharacter)
+        for(var i=0;i<=placeList.length-1;i++){
+            if(placeList[i] == undefined || placeList[i] == null){
+                ;
+            }else{
+                this.drawCharacter(placeList[i])
+            }
+        }
     },
 
     drawCharacter:function(chara){
@@ -273,6 +280,7 @@ place.init()
 setInterval(()=>{
     if(flg.load.whole && eval(cookie.obj.loggedIn)){
     place.update()
+    socket.emit("send-place-chara",place.myCharacter)
     }
     
 })

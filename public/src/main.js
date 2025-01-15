@@ -1,6 +1,11 @@
 console.log('loaded main.js');
 let screenMode = "place"
 let isShowLoginForm = true
+
+let socketIdList = []
+let placeList = []
+
+
 const flg = {
   load: {
     count: 0,
@@ -104,3 +109,8 @@ document.fonts.ready.then(function () {
   flg.load.font = true
   flg.load.count++
 });
+
+socket.on("res-place-data",(data)=>{
+  socketIdList = data[0]
+  placeList = data[1]
+})

@@ -16,6 +16,8 @@ const PORT = 3000;
 const allUserNameList = []
 console.log(__dirname);
 
+const socketIdList = []
+const socketIdPlaceList = []
 
 class user{
   name = ""
@@ -68,8 +70,14 @@ server.listen(PORT, () => {
 
 // クライアントとのコネクションが確立したら'connected'という表示させる
 io.on('connection', (socket) => {
+  socketIdList.push(socket.id)
   console.log(`connected id:${socket.id}`);
   io.to(socket.id).emit("confirm-connection")
+
+  socket.on("disconnect",()=>{
+    socketIdList.splice(socketIdList.indexOf(socket.id),1)
+    socketIdPlaceList[socketIdList.indexOf(socket.id)] = null
+  })
   socket.on("req-signup",(data)=>{
     const username = data[0]
     const password = data[1]
@@ -100,4 +108,11 @@ io.on('connection', (socket) => {
       io.to(socket.id).emit("res-login",[false,"user-not-found"])
     }
   })
+  socket.on("send-place-chara",(data)=>{
+    socketIdPlaceList[socketIdList.indexOf(socket.id)] = data
+  })
 });
+
+setInterval(()=>{
+  io.emit("res-place-data",[socketIdList,socketIdPlaceList])
+})
