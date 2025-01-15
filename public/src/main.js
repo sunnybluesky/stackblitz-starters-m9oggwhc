@@ -1,13 +1,14 @@
 console.log('loaded main.js');
 let screenMode = "place"
+let isShowLoginForm = true
 const flg = {
   load: {
     count: 0,
-    needed: 2,
+    needed: 3,
     whole: false,
     connection: false,
     font: false,
-
+    login:false,
   }
 }
 const responseTime = {
@@ -66,9 +67,18 @@ socket.on("res-login", function (data) {
     elements.login.loginSuccessMessage.textContent = "まもなくログインが完了します..."
     updateLoginFailedMessage("")
     setTimeout(() => {
+      if(isShowLoginForm){
       location.reload()
+      }
     }, 300)
+    flg.load.login = true
+    flg.load.count++
   } else {
+    //ログインに失敗
+    if(eval(cookie.obj.loggedIn)){
+      cookie.setCookie("loggedIn", "false")
+      location.reload()
+    }
     switch (data[1]) {
       case "user-not-found":
         updateLoginFailedMessage("ユーザーが見つかりませんでした。");

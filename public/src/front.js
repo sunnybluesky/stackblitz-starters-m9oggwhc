@@ -11,9 +11,22 @@ function waitLoading() {
         messageElement.textContent = loadMessage
         beforeMessage = loadMessage
     }
+    let isRequestedLogin = false
     const wait = setInterval(() => {
         if (loadMessage != beforeMessage) {
             updateMessage(loadMessage)
+        }
+        if(flg.load.connection){
+            if(!isRequestedLogin){
+                if(eval(cookie.obj.loggedIn)){
+                requestLogin(cookie.obj.username,cookie.obj.password)
+                isShowLoginForm = false
+                isRequestedLogin = true
+                }else{
+                flg.load.login = true //ログインは完了してない。
+                flg.load.count++
+                }
+            }
         }
         if (flg.load.whole) {
             clearInterval(wait)
@@ -21,6 +34,7 @@ function waitLoading() {
             cookie.refreshCookie()
             if (eval(cookie.obj.loggedIn)) {
                 document.querySelector(".login-page-screen").style.display = "none"//ログインフォームを非表示
+                isShowLoginForm = false
             } else {
                 console.log("login/signup")
 
@@ -28,8 +42,6 @@ function waitLoading() {
             screenElement.style.animation = `fadeout 0.3s ease 0s `
             setTimeout(() => {
                 screenElement.style.display = "none";
-
-
             }, 270)
 
         }
@@ -48,7 +60,7 @@ const elements = {
     login: {
         loginBtn: document.querySelector(".login-signup-button"),
         changeFormType: document.querySelector("#change-login-form-type"),
-        message: document.querySelector("#login-message"),
+        message: document.querySelector("#login-message-warning"),
         userName: document.querySelector("#login-user-name"),
         password: document.querySelector("#login-password"),
         loginSuccessMessage: document.querySelector(".success-login-message"),
@@ -182,7 +194,7 @@ const place = {
         attr:{},
         color:"#fff",
         size:30,
-        speed:5,
+        speed:3,
     },
     roomsList:[
         new placeRoom("lobby","color",[640,360],[],{color:"#224"}),
@@ -229,21 +241,38 @@ const place = {
     },
 
     drawCharacter:function(chara){
+        const x = chara.position[0];
+        const y = chara.position[1];
         const ctx = this.ctx
         switch(chara.type){
             case "Tofu":
                 ctx.fillStyle = chara.color
-                ctx.fillRect(chara.position[0] - (chara.size/2),chara.position[1] - (chara.size/2),chara.size,chara.size)
+                ctx.fillRect(x - (chara.size/2),y - (chara.size/2),chara.size,chara.size)
             break;
             default:
                 console.error("意図しない型です。")
             break;
         }
+
+        // 描画する文字
+        const text = user.name
+        // フォントの設定
+        ctx.font = '13px keifont';
+        // 文字の幅を取得
+        const textMetrics = ctx.measureText(text);
+        const textWidth = textMetrics.width;
+
+        // 文字の高さを推定（フォントサイズを基準に）
+        const textHeight = 20; // フォントサイズを仮定
+
+        ctx.fillText(text, (x) - textWidth / 2, (y) + textHeight / 2 + (chara.size/2 + 5));
     },
 }
 
 place.init()
 setInterval(()=>{
+    if(flg.load.whole && eval(cookie.obj.loggedIn)){
     place.update()
+    }
     
 })
