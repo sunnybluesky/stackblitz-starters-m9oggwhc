@@ -18,6 +18,9 @@ console.log(__dirname);
 
 const socketIdList = []
 const socketIdPlaceList = []
+const disconnectedSocketIdList = []
+
+const fps = 60;
 
 class user{
   name = ""
@@ -75,8 +78,7 @@ io.on('connection', (socket) => {
   io.to(socket.id).emit("confirm-connection")
 
   socket.on("disconnect",()=>{
-    socketIdList.splice(socketIdList.indexOf(socket.id),1)
-    socketIdPlaceList[socketIdList.indexOf(socket.id)] = null
+    disconnectedSocketIdList.push(socket.id)
   })
   socket.on("req-signup",(data)=>{
     const username = data[0]
@@ -114,5 +116,13 @@ io.on('connection', (socket) => {
 });
 
 setInterval(()=>{
+  for(var i=0;i<=disconnectedSocketIdList.length-1;i++){
+    if(socketIdList.includes(disconnectedSocketIdList[i])){
+      var id = disconnectedSocketIdList[i]
+      var index = socketIdList.indexOf(id)
+      socketIdPlaceList.splice(index,1)
+      socketIdList.splice(index,1)
+    }
+  }
   io.emit("res-place-data",[socketIdList,socketIdPlaceList])
-})
+},1000/fps)

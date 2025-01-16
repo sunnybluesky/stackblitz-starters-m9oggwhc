@@ -113,4 +113,7 @@ document.fonts.ready.then(function () {
 socket.on("res-place-data",(data)=>{
   socketIdList = data[0]
   placeList = data[1]
+  var index = socketIdList.indexOf(socket.id)
+  socketIdList.splice(index,1)
+  placeList.splice(index,1)
 })
