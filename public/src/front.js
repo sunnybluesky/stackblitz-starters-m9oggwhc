@@ -264,7 +264,7 @@ const place = {
         // 描画する文字
         const text = user.name
         // フォントの設定
-        ctx.font = '13px keifont';
+        ctx.font = '13px keifont-lighter';
         // 文字の幅を取得
         const textMetrics = ctx.measureText(text);
         const textWidth = textMetrics.width;
