@@ -78,6 +78,8 @@ socket.on("res-login", function (data) {
     }, 300)
     flg.load.login = true
     flg.load.count++
+
+    place.myCharacter.name = user.name
   } else {
     //ログインに失敗
     if(eval(cookie.obj.loggedIn)){
@@ -117,3 +119,7 @@ socket.on("res-place-data",(data)=>{
   socketIdList.splice(index,1)
   placeList.splice(index,1)
 })
+
+async function sendPlaceCharaData(data){
+  socket.emit("send-place-chara",data)
+}

@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <head>
-    <title>ProChat</title>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="assets/style.css" />
-    <link rel="stylesheet" href="assets/global.css" />
-    <script
-    src="https://cdn.socket.io/4.8.1/socket.io.min.js"
+
+<head>
+  <title>ProChat</title>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <link rel="stylesheet" href="assets/global.css" />
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"
     integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+"
-    crossorigin="anonymous"
-  ></script>
-  </head>
-  <body>
-    <!-- ログイン画面 -->
-    <div class="login-page-screen screen">
-      <div class="login-page-container center">
-        <div class="login-signup-form">
+    crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <!-- ログイン画面 -->
+  <div class="login-page-screen screen">
+    <div class="login-page-container center">
+      <div class="login-signup-form">
         <h1 class="title">ProChatにログイン</h1>
         <p>ユーザー名</p>
         <input type="text" id="login-user-name"><br>
@@ -29,10 +29,10 @@
         <p class="success-login-message"></p>
         <p class="failed-login-message warning"></p>
       </div>
-      </div>
     </div>
-    <!-- ロード画面 -->
-    <div class="loading-screen screen">
+  </div>
+  <!-- ロード画面 -->
+  <div class="loading-screen screen">
     <div class="loading-container">
       <div class="loading-child">
         <center>
@@ -41,27 +41,42 @@
         </center>
       </div>
     </div>
+  </div>
+  <div class="main screen">
+    <div class="top-menu">
+      <h2>ProChat / ぷろちゃっと！</h2>
     </div>
-    <div class="main screen">
-      <div class="top-menu">
-        <h2>ProChat / ぷろちゃっと！</h2>
-      </div>
-      <div class="middle-container">
-        <div class="side-menu">
-        
-          <div><span>ぷろちゃ広場</span></div>
-          <div><span>すれっど</span></div>
-          <div><span>めっせーじ</span></div>
-          <div class="bottom"><span>ゆーざー</span></div>
-        </div>
-        <div class="main-contents place">
-          <canvas id="canvas-place" width="1280" height="720"></canvas>
-        </div>
-      </div>
+    <div class="middle-container">
+      <div class="side-menu">
 
+        <div><span>ぷろちゃ広場</span></div>
+        <div><span>すれっど</span></div>
+        <div><span>めっせーじ</span></div>
+        <div class="bottom"><span>ゆーざー</span></div>
+      </div>
+      <div class="main-contents place">
+        <div class="public-chat-container">
+          <h1>public chat</h1>
+          <div class="message-list"></div>
+          <div class="input-container">
+            <input type="text" id="public-chat-input">
+            <div class="send-button">
+              <img src="assets/img/send.svg">
+            </div>
+          </div>
+        </div>
+        <canvas id="canvas-place" width="720" height="720"></canvas>
+      </div>
     </div>
-    <script src="src/cookie.js"></script>
-    <script src="src/main.js"></script>
-    <script src="src/front.js"></script>
-  </body>
+    <div class="template hide">
+      <div id="template-message">
+
+      </div>
+    </div>
+  </div>
+  <script src="src/oparate.js"></script>
+  <script src="src/main.js"></script>
+  <script src="src/front.js"></script>
+</body>
+
 </html>

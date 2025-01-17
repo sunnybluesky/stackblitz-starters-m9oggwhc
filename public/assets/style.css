@@ -127,4 +127,33 @@ input{
   height:100%;
 
 }
+.hide{
+  display:none;
+}
 
+.public-chat-container{
+  text-align: center;
+}
+.public-chat-container  > .input-container{
+  margin-left:5%;
+
+  width:90%;
+  display: flex;
+justify-content: center;
+text-align: center;
+}
+.public-chat-container  > .input-container > input{
+  width:90%;
+}
+.public-chat-container  > .input-container > .send-button{
+  background:rgb(63, 63, 122);
+  width:10%;
+  border-radius: 5px;
+  position:relative;
+}
+.public-chat-container > .input-container > .send-button > img{
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  height:18px;
+}
