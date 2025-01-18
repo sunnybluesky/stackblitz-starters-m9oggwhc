@@ -53,6 +53,9 @@ body {
   color: var(--font-color);
   font-family: "keifont";
 }
+h1{
+  margin:0px;
+}
 .loading-screen{
   position: fixed;
   top:0px;
@@ -125,7 +128,6 @@ input{
 }
 .mein-contents{
   height:100%;
-
 }
 .hide{
   display:none;
@@ -135,7 +137,10 @@ input{
   text-align: center;
 }
 .public-chat-container  > .input-container{
-  margin-left:5%;
+  margin:5%;
+  /*
+ margin-top:0%;
+ */
 
   width:90%;
   display: flex;
@@ -143,11 +148,11 @@ justify-content: center;
 text-align: center;
 }
 .public-chat-container  > .input-container > input{
-  width:90%;
+  width:calc(100% - 32px);
 }
 .public-chat-container  > .input-container > .send-button{
   background:rgb(63, 63, 122);
-  width:10%;
+  width:32px;
   border-radius: 5px;
   position:relative;
 }
@@ -156,4 +161,16 @@ text-align: center;
   top: 50%;
   transform: translate(-50%, -50%);
   height:18px;
+  width:18spx;
+}
+.room-name{
+  height:35px;
+  margin:0px;
+  padding:10px;
+}
+.message-list{
+  margin-left:5%;
+  margin-right:5%;
+  border-top:1px solid var(--highlight-color);
+  border-bottom:1px solid var(--highlight-color);
 }

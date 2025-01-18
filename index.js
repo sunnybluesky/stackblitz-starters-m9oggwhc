@@ -1,7 +1,4 @@
 // run `node index.js` in the terminal
-
-console.log(`Hello Node.js v${process.versions.node}!`);
-
 const express = require('express');
 const http = require('http');
 
@@ -34,12 +31,19 @@ class user{
     this.name = name
     this.password = password
     userList.push(this)
+    this.joinRoom("PUBLIC_CHAT")
   }
   login(){
     this.lastLogined = new Date()
   }
   join(id){
     this.loginedSocketId.push(id)
+  }
+  joinRoom(room){
+    this.rooms.push(room)
+  }
+  leaveRoom(room){
+    this.rooms.splice(this.rooms.indexOf(room),1)
   }
   leave(id){
     var index = this.loginedSocketId.indexOf(id)
@@ -69,6 +73,7 @@ app.all('*', (req, res) => {
 // 3000番ポートでHTTPサーバーを起動
 server.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
+  bootingProcess()//起動処理
 });
 
 // クライアントとのコネクションが確立したら'connected'という表示させる
@@ -103,6 +108,7 @@ io.on('connection', (socket) => {
       const password = findUser(username).password
       if(password == reqestedPassword){
         io.to(socket.id).emit("res-login",[true,"success",findUser(username)])
+        findUser(username).loginedSocketId.push(socket.id)
       }else{
         io.to(socket.id).emit("res-login",[false,"password-invalid"])
       }
@@ -113,7 +119,43 @@ io.on('connection', (socket) => {
   socket.on("send-place-chara",(data)=>{
     socketIdPlaceList[socketIdList.indexOf(socket.id)] = data
   })
+  socket.on("send-message",(data)=>{
+    sendMessage(data.roomId,data.user,data.message)
+    console.log(`New message:${data.message}`)
+    var m = getMessages(data.roomId,1)
+    var obj = {
+      room:data.roomId,
+      content:m,
+    }
+    updateMessageToMenber(data.roomId,obj)
+  })
+  socket.on("req-message",(data)=>{
+    // data= {room,length}
+    var m = getMessages(data.room,data.len)
+    var obj = {
+      room:data.room,
+      content:m,
+    }
+    io.to(socket.id).emit("res-message",obj)
+  })
 });
+function updateMessageToMenber(room,data){
+  const idList = []
+  for(var i=0;i<=userList.length-1;i++){
+    if(userList[i].rooms.includes(room)){
+      var arr = userList[i].loginedSocketId
+      for(var j=0;j<=arr.length-1;j++){
+        idList.push(arr[j])
+      }
+    }
+  }
+  for(var i=0;i<=idList.length-1;i++){
+    io.to(idList[i]).emit("res-message",{
+      content:data,
+      room:room,
+    })
+  }
+}
 
 setInterval(()=>{
   for(var i=0;i<=disconnectedSocketIdList.length-1;i++){
@@ -126,3 +168,62 @@ setInterval(()=>{
   }
   io.emit("res-place-data",[socketIdList,socketIdPlaceList])
 },1000/fps)
+
+class Message {
+  constructor(sender, message, timestamp) {
+    this.sender = sender;
+    this.message = message;
+    this.timestamp = timestamp || new Date();
+  }
+}
+
+class Room {
+  constructor(id, name) {
+    this.id = id;
+    this.name = name;
+    this.messages = [];
+  }
+
+  addMessage(message) {
+    this.messages.push(message);
+  }
+}
+
+// 全てのルームを管理するオブジェクト
+const rooms = {};
+
+// 新しいルームを作成する関数
+function createRoom(id, name) {
+  rooms[id] = new Room(id, name);
+}
+
+// メッセージを送信する関数
+function sendMessage(roomId, sender, message) {
+  const room = rooms[roomId];
+  if (room) {
+    room.addMessage(new Message(sender, message));
+  } else {
+    console.error(`Room ${roomId} not found`);
+  }
+}
+
+// 特定のルームのメッセージを取得する関数
+function getMessages(roomId,len=true) {
+  const room = rooms[roomId];
+  if(len === true && room){
+    len = room.messages.length
+  }
+  let arr = []
+  if(room){
+    var temp = room.messages
+    for(var i=0;i<=(temp.length-len)-1;i++){
+      temp[i] = null
+    }
+    arr = temp
+  }
+  return arr;
+}
+
+function bootingProcess(){
+  createRoom("PUBLIC_CHAT","ぜんたいちゃっと！")
+}

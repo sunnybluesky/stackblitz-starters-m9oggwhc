@@ -56,7 +56,9 @@
       </div>
       <div class="main-contents place">
         <div class="public-chat-container">
-          <h1>public chat</h1>
+          <div class="room-name">
+            <h1>ぜんたいちゃっと！</h1>
+          </div>
           <div class="message-list"></div>
           <div class="input-container">
             <input type="text" id="public-chat-input">
@@ -70,7 +72,16 @@
     </div>
     <div class="template hide">
       <div id="template-message">
-
+        <div class="credit-bar">
+          <div class="credit-icon" id="@sample">
+            <img>
+          </div>
+          <span class="credit-username">sample</span>
+          <span class="credit-timestamp">xx days ago</span>
+        </div>
+        <div class="main-message">
+          <p>テキスト見本</p>
+        </div>
       </div>
     </div>
   </div>
@@ -78,5 +89,4 @@
   <script src="src/main.js"></script>
   <script src="src/front.js"></script>
 </body>
-
 </html>

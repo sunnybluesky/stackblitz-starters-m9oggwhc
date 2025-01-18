@@ -1,10 +1,16 @@
 console.log('loaded main.js');
+
+const publicChatRoomName = "PUBLIC_CHAT"
+
 let screenMode = "place"
 let isShowLoginForm = true
 
 let socketIdList = []
 let placeList = []
 
+let room = publicChatRoomName
+
+const rooms = {}
 
 const flg = {
   load: {
@@ -123,3 +129,48 @@ socket.on("res-place-data",(data)=>{
 async function sendPlaceCharaData(data){
   socket.emit("send-place-chara",data)
 }
+
+//メッセージ送信
+function checkMessage(message = ""){
+  if(message == ""){
+    alert("メッセージが入力されていません。")
+    return null;
+  }
+  if(message.length > 1000){
+    alert("メッセージは1000文字以内です。")
+    return null;
+  }
+  sendMessage(room,message);
+}
+function sendMessage(r = publicChatRoomName,message = ""){
+  data = {
+    user:user.name,
+    roomId:r,
+    message:message,
+  }
+  socket.emit("send-message",data)
+}
+function getMessage(r = publicChatRoomName,length = true){
+  socket.emit("req-message",{
+    room:r,len:length,
+  })
+}
+
+function getRoomMessages(r = publicChatRoomName){
+  getMessage(r,10)
+}
+
+socket.on("res-message",(data)=>{
+  console.log(data)
+  
+  if(rooms[data.room] == undefined){
+    rooms[data.room] = []
+  }
+  for(var i=0;i<=data.content.length-1;i++){
+    if(data.content[i] == null){
+      ;
+    }else{
+      rooms[data.room][i] = data.content[i]
+    }
+  }
+})

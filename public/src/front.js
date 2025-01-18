@@ -68,10 +68,18 @@ const elements = {
     place:{
         canvas:document.querySelector("#canvas-place"),
         publicChat:document.querySelector(".public-chat-container"),
+        roomTitle:document.querySelector(".public-chat-container > .room-name"),
         chatInput:document.querySelector("#public-chat-input"),
+        chatInputContainer:document.querySelector(".public-chat-container > .input-container"),
+        messageList:document.querySelector(".public-chat-container > .message-list"),
+        chatSendButton:document.querySelector(".public-chat-container > .input-container > .send-button")
     },
     layout:{
-        sideMenu:document.querySelector(".side-menu")
+        sideMenu:document.querySelector(".side-menu"),
+        topMenu:document.querySelector(".top-menu"),
+    },
+    template: {
+        message:document.querySelector(".template > #template-message"),
     },
 }
 
@@ -289,6 +297,11 @@ const publicChat = {
         var w2 = elements.place.canvas.clientWidth;
         this.el.style.width = `${innerWidth - w1 - w2}px`
         this.el.style.height = `${innerHeight-40}px`
+
+        var h1 = elements.layout.topMenu.clientHeight
+        var h2 = elements.place.roomTitle.clientHeight
+        var h3 = elements.place.chatInputContainer.clientHeight
+        elements.place.messageList.style.height = `${innerHeight - h1-h2-h3 -30}px` 
     },
     init:function(){
         elements.place.chatInput.addEventListener("focus",(e)=>{
@@ -297,16 +310,31 @@ const publicChat = {
         elements.place.chatInput.addEventListener("blur",(e)=>{
             this.isFocusedInput = false
         })
+        elements.place.chatInput.addEventListener("keydown",(e)=>{
+            if(e.key == "Enter"){
+                checkMessage(elements.place.chatInput.value)
+            }
+        })
+        elements.place.chatSendButton.addEventListener("click",()=>{
+            checkMessage(elements.place.chatInput.value)
+        })
+        
     },
     update:function(){
         this.updateSize()
     },
 }
 
-place.init()
-publicChat.init()
+
+var isFirst = true
 setInterval(()=>{
     if(flg.load.whole && eval(cookie.obj.loggedIn)){
+        if(isFirst){
+            isFirst = false
+            place.init()
+            publicChat.init()
+            getRoomMessages(publicChatRoomName)
+        }
     place.update()
     publicChat.update()
     sendPlaceCharaData(place.myCharacter)
