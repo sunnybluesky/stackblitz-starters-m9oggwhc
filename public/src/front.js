@@ -64,23 +64,7 @@ const elements = {
         password: document.querySelector("#login-password"),
         loginSuccessMessage: document.querySelector(".success-login-message"),
         loginFailedMessage: document.querySelector(".failed-login-message")
-    },
-    place:{
-        canvas:document.querySelector("#canvas-place"),
-        publicChat:document.querySelector(".public-chat-container"),
-        roomTitle:document.querySelector(".public-chat-container > .room-name"),
-        chatInput:document.querySelector("#public-chat-input"),
-        chatInputContainer:document.querySelector(".public-chat-container > .input-container"),
-        messageList:document.querySelector(".public-chat-container > .message-list"),
-        chatSendButton:document.querySelector(".public-chat-container > .input-container > .send-button")
-    },
-    layout:{
-        sideMenu:document.querySelector(".side-menu"),
-        topMenu:document.querySelector(".top-menu"),
-    },
-    template: {
-        message:document.querySelector(".template > #template-message"),
-    },
+    }
 }
 
 let loginFormMode = "login"
@@ -194,66 +178,73 @@ class placeRoom {
 }
 
 const place = {
-    el:elements.place.canvas,
+    key:{
+        w:false,
+        a:false,
+        s:false,
+        d:false
+    },
+    el:document.querySelector("#canvas-place"),
     ctx:null,
-    showFPS:true,
     myCharacter:{
-        name:"connecting",
         type:"Tofu",
         position:[640,360],
         //ここまで必須
         attr:{},
         color:"#fff",
         size:30,
-        speed:180/fps,
+        speed:3,
     },
     roomsList:[
-        new placeRoom("lobby","color",[360,360],[],{color:"#224"}),
+        new placeRoom("lobby","color",[640,360],[],{color:"#224"}),
     ],
     roomNumber:0,
-    //初期化
     init:function(){
         this.ctx = this.el.getContext('2d');
+        document.body.addEventListener("keydown",(e)=>{
+            if(e.key == "w"){this.key.w = true;}
+            if(e.key == "a"){this.key.a = true;}
+            if(e.key == "s"){this.key.s = true;}
+            if(e.key == "d"){this.key.d = true;}
+        })
+        document.body.addEventListener("keyup",(e)=>{
+            if(e.key == "w"){this.key.w = false;}
+            if(e.key == "a"){this.key.a = false;}
+            if(e.key == "s"){this.key.s = false;}
+            if(e.key == "d"){this.key.d = false;}
+        })
     },
     updatePosition:function(){
-        if(key.w){this.roomsList[this.roomNumber].position[1] -= this.myCharacter.speed}
-        if(key.s){this.roomsList[this.roomNumber].position[1] += this.myCharacter.speed}
-        if(key.d){this.roomsList[this.roomNumber].position[0] += this.myCharacter.speed}
-        if(key.a){this.roomsList[this.roomNumber].position[0] -= this.myCharacter.speed}
+        if(this.key.w){this.roomsList[this.roomNumber].position[1] -= this.myCharacter.speed}
+        if(this.key.s){this.roomsList[this.roomNumber].position[1] += this.myCharacter.speed}
+        if(this.key.d){this.roomsList[this.roomNumber].position[0] += this.myCharacter.speed}
+        if(this.key.a){this.roomsList[this.roomNumber].position[0] -= this.myCharacter.speed}
 
         var x = this.roomsList[this.roomNumber].position[0] 
         var y = this.roomsList[this.roomNumber].position[1]
         if(x < 0){ this.roomsList[this.roomNumber].position[0] = 0;}
-        if(x > 720){ this.roomsList[this.roomNumber].position[0] =720;}
+        if(x > 1280){ this.roomsList[this.roomNumber].position[0] =1280;}
         if(y < 0){ this.roomsList[this.roomNumber].position[1] = 0; }
         if(y > 720){ this.roomsList[this.roomNumber].position[1] = 720;}
     },
     update:function(){
         const ctx = this.ctx
         this.el.style.height = (innerHeight-40)+"px" //canvasのサイズを変更
-        ctx.clearRect(0,0,this.el.innerWidth,this.el.innerHeight);
+        ctx.clearRect(0,0,this.el.innerWidth,this.el.innerHeight)
         this.roomsList[this.roomNumber].drawBackGround()//背景を描画
 
-        if(publicChat.isFocusedInput){
-            ;
-        }else{
         this.updatePosition()
-        }
+
         this.myCharacter.position = this.roomsList[this.roomNumber].position
         this.drawCharacter(this.myCharacter)
         for(var i=0;i<=placeList.length-1;i++){
             if(placeList[i] == undefined || placeList[i] == null){
                 ;
             }else{
+                if(socketIdList[i] != socket.id){
                 this.drawCharacter(placeList[i])
             }
         }
-        if(this.showFPS){
-            ctx.font = '13px keifont-lighter';
-            ctx.fillStyle = "#000"
-            ctx.fillText(`FPS:${Math.round(fpsState.average)}`,2,15)
-            ctx.fillStyle = "#fff"
-            ctx.fillText(`FPS:${Math.round(fpsState.average)}`,0,13)
         }
     },
 
@@ -272,9 +263,9 @@ const place = {
         }
 
         // 描画する文字
-        const text = chara.name
+        const text = user.name
         // フォントの設定
-        ctx.font = '13px keifont-lighter';
+        ctx.font = '13px keifont';
         // 文字の幅を取得
         const textMetrics = ctx.measureText(text);
         const textWidth = textMetrics.width;
@@ -282,62 +273,15 @@ const place = {
         // 文字の高さを推定（フォントサイズを基準に）
         const textHeight = 20; // フォントサイズを仮定
 
-        ctx.fillStyle = "#000"
-        ctx.fillText(text, (x+2) - textWidth / 2, (y) + textHeight / 2 + (chara.size/2 + 7));
-        ctx.fillStyle = "#fff"
         ctx.fillText(text, (x) - textWidth / 2, (y) + textHeight / 2 + (chara.size/2 + 5));
-
-    },
-}
-const publicChat = {
-    el:elements.place.publicChat,
-    isFocusedInput:false,
-    updateSize:function(){
-        var w1 = elements.layout.sideMenu.clientWidth;
-        var w2 = elements.place.canvas.clientWidth;
-        this.el.style.width = `${innerWidth - w1 - w2}px`
-        this.el.style.height = `${innerHeight-40}px`
-
-        var h1 = elements.layout.topMenu.clientHeight
-        var h2 = elements.place.roomTitle.clientHeight
-        var h3 = elements.place.chatInputContainer.clientHeight
-        elements.place.messageList.style.height = `${innerHeight - h1-h2-h3 -30}px` 
-    },
-    init:function(){
-        elements.place.chatInput.addEventListener("focus",(e)=>{
-            this.isFocusedInput = true
-        })
-        elements.place.chatInput.addEventListener("blur",(e)=>{
-            this.isFocusedInput = false
-        })
-        elements.place.chatInput.addEventListener("keydown",(e)=>{
-            if(e.key == "Enter"){
-                checkMessage(elements.place.chatInput.value)
-            }
-        })
-        elements.place.chatSendButton.addEventListener("click",()=>{
-            checkMessage(elements.place.chatInput.value)
-        })
-        
-    },
-    update:function(){
-        this.updateSize()
     },
 }
 
-
-var isFirst = true
+place.init()
 setInterval(()=>{
     if(flg.load.whole && eval(cookie.obj.loggedIn)){
-        if(isFirst){
-            isFirst = false
-            place.init()
-            publicChat.init()
-            getRoomMessages(publicChatRoomName)
-        }
     place.update()
-    publicChat.update()
-    sendPlaceCharaData(place.myCharacter)
-    fpsState.update()
+    socket.emit("send-place-chara",place.myCharacter)
     }
-},1000/fps)
+    
+})
